@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Photos
 
 class ViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
 
@@ -20,6 +21,13 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
 
         collectionVIew.dataSource = self
         collectionVIew.delegate = self
+
+        // ユーザーに許可を求めるダイアログを表示。操作完了後に、引数status戻り値なしのクロージャ式で書かれた関数が実行される。
+        PHPhotoLibrary.requestAuthorization { (status: PHAuthorizationStatus) in
+            if status == .authorized {
+                self.loadPhotos()
+            }
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -56,6 +64,12 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
     // セル同士の縦マージン
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         return 0.0
+    }
+
+    // MARK: - ファンクション
+    /// 写真を取得する
+    func loadPhotos() {
+        // FIXME: 写真取得処理の実装
     }
 }
 
