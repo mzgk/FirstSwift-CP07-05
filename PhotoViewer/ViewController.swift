@@ -39,5 +39,23 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
         // FIXME: セルのインスタンスは暫定
         return UICollectionViewCell()
     }
+
+    // MARK: - デリゲート：UICollectionViewDelegateFlowLayout
+    // セルのサイズ（今回は幅３等分での正方形で表示）
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        // 横３列なので、collectionViewを３等分
+        let width = collectionVIew.bounds.size.width / 3
+        return CGSize(width: width, height: width)
+    }
+
+    // セル同士の横マージン
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 0.0
+    }
+
+    // セル同士の縦マージン
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return 0.0
+    }
 }
 
