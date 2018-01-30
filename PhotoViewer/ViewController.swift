@@ -15,7 +15,8 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
     @IBOutlet weak var collectionView: UICollectionView!
 
     // MARK: - プロパティ
-    var photos: [PHAsset] = []
+    var photos: [PHAsset] = []      // 取得した写真情報（画像は格納されない）
+    let manager = PHImageManager()  // 画像取得するためのインスタンス
 
     // MARK: - ライフサイクル
     override func viewDidLoad() {
@@ -41,14 +42,33 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
     // MARK: - デリゲート：UICollectionViewDataSource
     // セルの数
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        // FIXME: セル数は暫定
-        return 0
+        return photos.count
     }
 
     // 対象のインデックスに対応するセルのインスタンス
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        // FIXME: セルのインスタンスは暫定
-        return UICollectionViewCell()
+        // セルを生成（StoryBoardから"ImageCell"とIdentifierで定義したUICollectionViewCellが探し出され生成される）
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ImageCell", for: indexPath)
+        // そのセルに対応するPHAssetインスタンスをphotosプロパティから取得する
+        let asset = photos[indexPath.item]
+        // 写真情報から画像を取得する際のサイズを作成
+        let width = collectionView.bounds.size.width
+        // PHAssetインスタンスから画像を取得する
+        manager.requestImage(
+            for: asset,     // 対象のPHAssetインスタンス
+            targetSize: CGSize(width: width, height: width),
+            contentMode: .aspectFit,   // アスペクト比を保ったまま、指定サイズに収まるように
+            options: nil,
+            resultHandler: { result, info in    // 画像の取得が終わったら呼び出される（引数２・戻り値なしのクロージャ構文）
+                // result : 取得できた画像イメージ（オプショナル）
+                if let image = result { // if-let文でアンラップ
+                    // セル内から指定したTagのインスタンスを取得　→　UIView?インスタンスが返るが、UIImageViewであることは明確なのでダウンキャスト
+                    let imageView = cell.viewWithTag(1) as! UIImageView
+                    // 上記で取得したように、imageViewにはセル内に配置したUIImageViewのインスタンスが格納されている
+                    imageView.image = image
+                }
+        })
+        return cell
     }
 
     // MARK: - デリゲート：UICollectionViewDelegateFlowLayout
