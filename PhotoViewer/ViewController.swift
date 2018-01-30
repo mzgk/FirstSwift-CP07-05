@@ -12,7 +12,7 @@ import Photos
 class ViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
 
     // MARK: - アウトレット
-    @IBOutlet weak var collectionVIew: UICollectionView!
+    @IBOutlet weak var collectionView: UICollectionView!
 
     // MARK: - プロパティ
     var photos: [PHAsset] = []
@@ -22,8 +22,8 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
 
-        collectionVIew.dataSource = self
-        collectionVIew.delegate = self
+        collectionView.dataSource = self
+        collectionView.delegate = self
 
         // ユーザーに許可を求めるダイアログを表示。操作完了後に、引数status戻り値なしのクロージャ式で書かれた関数が実行される。
         PHPhotoLibrary.requestAuthorization { (status: PHAuthorizationStatus) in
@@ -55,7 +55,7 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
     // セルのサイズ（今回は幅３等分での正方形で表示）
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         // 横３列なので、collectionViewを３等分
-        let width = collectionVIew.bounds.size.width / 3
+        let width = collectionView.bounds.size.width / 3
         return CGSize(width: width, height: width)
     }
 
@@ -81,7 +81,7 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
         photos = loadPhotos
         // 非同期処理の中（呼び出し元がユーザ許可のハンドラ関数内）で、UIを操作するのでDispatchQueue.mainをを使用する　→　UIへの反映を即時に行うため
         DispatchQueue.main.sync {
-            collectionVIew.reloadData()
+            collectionView.reloadData()
         }
     }
 }

@@ -60,7 +60,7 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
-                        <outlet property="collectionVIew" destination="uvM-do-GTp" id="GS4-lt-Cnj"/>
+                        <outlet property="collectionView" destination="uvM-do-GTp" id="6E8-pk-0Uz"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
