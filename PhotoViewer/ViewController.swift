@@ -14,6 +14,9 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
     // MARK: - アウトレット
     @IBOutlet weak var collectionVIew: UICollectionView!
 
+    // MARK: - プロパティ
+    var photos: [PHAsset] = []
+
     // MARK: - ライフサイクル
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -67,9 +70,19 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
     }
 
     // MARK: - ファンクション
-    /// 写真を取得する
+    /// 写真を取得する（呼び出し元がユーザー許可のハンドラ関数　→　非同期処理内）
     func loadPhotos() {
-        // FIXME: 写真取得処理の実装
+        // 写真データを取得する（メディア：画像、オプション：なし、戻り値はPHFetchResultインスタンスの配列）
+        let result = PHAsset.fetchAssets(with: .image, options: nil)
+        // 写真を取り出すために必要なIndexSet構造体を作成する（０〜写真数 - 1の範囲）
+        let indexSet = IndexSet(integersIn: 0..<result.count)
+        // 写真データの配列を取得する
+        let loadPhotos = result.objects(at: indexSet)
+        photos = loadPhotos
+        // 非同期処理の中（呼び出し元がユーザ許可のハンドラ関数内）で、UIを操作するのでDispatchQueue.mainをを使用する　→　UIへの反映を即時に行うため
+        DispatchQueue.main.sync {
+            collectionVIew.reloadData()
+        }
     }
 }
 
